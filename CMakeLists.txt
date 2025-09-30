@@ -1,0 +1,22 @@
+cmake_minimum_required(VERSION 3.16)
+
+project(udp_command LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+add_library(udp STATIC
+  src/udp_sender.cpp
+  src/command_serialization.cpp
+)
+
+target_include_directories(udp PUBLIC include)
+
+add_executable(send_command apps/send_command.cpp)
+target_link_libraries(send_command PRIVATE udp)
+
+add_executable(recv_command apps/recv_command.cpp)
+target_link_libraries(recv_command PRIVATE udp)
+
+
