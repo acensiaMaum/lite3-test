@@ -9,19 +9,20 @@
 int main(int argc, char** argv) {
 // int main() {
   uint32_t code = (argc >= 2) ? hexStringToUint32(argv[1]) : 0x21010202u;
-  // const uint16_t port = (argc >= 3) ? static_cast<uint16_t>(std::stoi(argv[2])) : static_cast<uint16_t>(43893);
-
+  // uint32_t cmd_type = (argc >= 3) ? std::stoi(argv[2]) : 0;
+  uint32_t cmd_value = (argc >= 3) ? static_cast<uint16_t>(std::stoi(argv[2])) : 0;
 
   const std::string ip = "192.168.2.1";
   const uint16_t port = 43893;
 
+  
   // Example payload (host-endian raw struct send)
   Command cmd{};
   cmd.head.code = code;
   cmd.head.type = 0u;
-  cmd.head.paramters_size = 0; //2u * sizeof(uint32_t);
+  cmd.head.paramters_size = cmd_value; //2u * sizeof(uint32_t);
   // for (size_t i = 0; i < kDataSize; ++i) cmd.data[i] = 0u;
-  // cmd.data[0] = 100u;
+  // cmd.data[0] = cmd_value;
   // cmd.data[1] = 200u;
 
   UdpSender sender(ip, port);

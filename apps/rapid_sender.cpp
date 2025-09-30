@@ -14,11 +14,11 @@ static std::atomic<bool> g_running{true};
 
 int main(int argc, char** argv) {
   // const std::string ip = (argc >= 2) ? std::string(argv[1]) : std::string("192.168.2.1");
-  // const uint16_t port = (argc >= 3) ? static_cast<uint16_t>(std::stoi(argv[2])) : static_cast<uint16_t>(43893);
+  uint32_t cmd_value = (argc >= 3) ? static_cast<uint16_t>(std::stoi(argv[2])) : 0;
   const std::string ip = "192.168.2.1";
   const uint16_t port = 43893;
   if (argc < 2) {
-    std::cerr << "Usage: " << argv[0] << " <command>\n";
+    std::cerr << "Usage: " << argv[0] << " <command> <value?> \n";
     return 1;
   }
 
@@ -28,11 +28,11 @@ int main(int argc, char** argv) {
 
   Command cmd{};
   cmd.head.code = code;
-  cmd.head.type = 1u;
+  cmd.head.type = 1;
   for (size_t i = 0; i < kDataSize; ++i) cmd.data[i] = 0u;
-  cmd.data[0] = 100u;
+  cmd.data[0] = cmd_value;
   cmd.head.paramters_size = sizeof(cmd.data);
-
+  cout<<"Send value: "<<int(cmd_value)<<endl;
   UdpSender sender(ip, port);
   if (!sender.is_valid()) {
     std::cerr << "Invalid destination or socket init failed: " << ip << ":" << port << "\n";
