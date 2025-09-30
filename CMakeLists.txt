@@ -10,6 +10,7 @@ add_library(udp STATIC
   src/udp_sender.cpp
   src/command_serialization.cpp
   src/stable_sender.cpp
+  src/hex_parser.cpp
 )
 
 target_include_directories(udp PUBLIC include)
@@ -22,6 +23,9 @@ target_link_libraries(recv_command PRIVATE udp)
 
 add_executable(stable_sender apps/stable_sender.cpp)
 target_link_libraries(stable_sender PRIVATE udp)
+
+add_executable(rapid_sender apps/rapid_sender.cpp)
+target_link_libraries(rapid_sender PRIVATE udp)
 
 add_executable(single_sender src/main.cpp)
 target_link_libraries(single_sender PRIVATE udp)

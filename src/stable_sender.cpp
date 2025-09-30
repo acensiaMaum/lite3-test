@@ -3,7 +3,13 @@
 #include <iostream>
 
 StableSender::StableSender(UdpSender& sender, const Command& cmd, double hz)
-  : sender_(sender), cmd_(cmd) {
+  : sender_(sender), cmd_(cmd), type_(0) {
+  if (hz <= 0.0) hz = 2.0;
+  const auto period_ms = static_cast<int>(1000.0 / hz);
+  period_ = std::chrono::milliseconds(period_ms > 1 ? period_ms : 1);
+}
+StableSender::StableSender(UdpSender& sender, const CommandHead& cmd, double hz)
+  : sender_(sender), cmdhead_(cmd), type_(1) {
   if (hz <= 0.0) hz = 2.0;
   const auto period_ms = static_cast<int>(1000.0 / hz);
   period_ = std::chrono::milliseconds(period_ms > 1 ? period_ms : 1);
@@ -25,8 +31,15 @@ void StableSender::stop() {
 
 void StableSender::run() {
   while (running_.load()) {
-    if (!sender_.send(cmd_)) {
+    if (type_ == 0){
+      if (!sender_.send(cmd_)) {
       std::cerr << "Send failed\n";
+      }
+    }
+    else if (type_ == 1){
+      if (!sender_.send(cmdhead_)) {
+        std::cerr << "Send failed\n";
+      }
     }
     std::this_thread::sleep_for(period_);
   }

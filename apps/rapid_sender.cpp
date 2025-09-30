@@ -17,16 +17,21 @@ int main(int argc, char** argv) {
   // const uint16_t port = (argc >= 3) ? static_cast<uint16_t>(std::stoi(argv[2])) : static_cast<uint16_t>(43893);
   const std::string ip = "192.168.2.1";
   const uint16_t port = 43893;
-  uint32_t code = (argc >= 2) ? hexStringToUint32(argv[1]) : 0x21040001u;
+  if (argc < 2) {
+    std::cerr << "Usage: " << argv[0] << " <command>\n";
+    return 1;
+  }
+
+  
+  uint32_t code = hexStringToUint32(argv[1]);
   
 
-  CommandHead cmd{};
-  cmd.code = code;
-  cmd.type = 0u;
-  cmd.paramters_size = 0;
-  // for (size_t i = 0; i < kDataSize; ++i) cmd.data[i] = 0u;
-  // cmd.data[0] = 100u;
-  // cmd.data[1] = 200u;
+  Command cmd{};
+  cmd.head.code = code;
+  cmd.head.type = 1u;
+  for (size_t i = 0; i < kDataSize; ++i) cmd.data[i] = 0u;
+  cmd.data[0] = 100u;
+  cmd.head.paramters_size = sizeof(cmd.data);
 
   UdpSender sender(ip, port);
   if (!sender.is_valid()) {
@@ -37,7 +42,7 @@ int main(int argc, char** argv) {
   std::signal(SIGINT, [](int){ g_running.store(false); });
   std::cout << "Starting 2 Hz sender to " << ip << ":" << port << " (Ctrl+C to stop)\n";
 
-  StableSender stable(sender, cmd, 2.0);
+  StableSender stable(sender, cmd, 20.0);
   stable.start();
 
   while (g_running.load()) {

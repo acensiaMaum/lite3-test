@@ -10,6 +10,7 @@
 class StableSender {
 public:
   StableSender(UdpSender& sender, const Command& cmd, double hz = 2.0);
+  StableSender(UdpSender& sender, const CommandHead& cmd, double hz = 2.0);
   ~StableSender();
 
   StableSender(const StableSender&) = delete;
@@ -26,6 +27,8 @@ private:
 
   UdpSender& sender_;
   Command cmd_;
+  CommandHead cmdhead_;
+  int type_;
   std::chrono::milliseconds period_;
   std::atomic<bool> running_{false};
   std::thread worker_;
