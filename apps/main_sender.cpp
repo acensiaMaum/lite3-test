@@ -3,26 +3,18 @@
 #include "stable_sender.hpp"
 
 #include <iostream>
-#include <vector>
 #include <string>
-#include <thread>
 #include <atomic>
 #include <chrono>
+#include <thread>
 #include <csignal>
 
-// int main(int argc, char** argv) {
 static std::atomic<bool> g_running{true};
 
-int main() {
-//   if (argc < 3) {
-//     std::cerr << "Usage: " << argv[0] << " <dest_ip> <port>\n";
-//     return 1;
-//   }
+int main(int argc, char** argv) {
+  const std::string ip = (argc >= 2) ? std::string(argv[1]) : std::string("192.168.2.1");
+  const uint16_t port = (argc >= 3) ? static_cast<uint16_t>(std::stoi(argv[2])) : static_cast<uint16_t>(43893);
 
-  const std::string ip = "192.168.2.1";
-  const uint16_t port = 43893;
-
-  // Example payload (host-endian raw struct send)
   Command cmd{};
   cmd.head.code = 0x21010202u;
   cmd.head.type = 0u;
@@ -38,7 +30,6 @@ int main() {
   }
 
   std::signal(SIGINT, [](int){ g_running.store(false); });
-
   std::cout << "Starting 2 Hz sender to " << ip << ":" << port << " (Ctrl+C to stop)\n";
 
   StableSender stable(sender, cmd, 2.0);

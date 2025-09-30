@@ -71,4 +71,11 @@ bool UdpSender::send(const CommandHead& head) const {
   return sent == static_cast<ssize_t>(sizeof(head));
 }
 
+bool UdpSender::send(const Command& cmd) const {
+  if (!valid_ || socketFd_ < 0 || addr_ == nullptr) return false;
+  const ssize_t sent = ::sendto(socketFd_, &cmd, sizeof(cmd), 0,
+                                reinterpret_cast<sockaddr*>(addr_), sizeof(sockaddr_in));
+  return sent == static_cast<ssize_t>(sizeof(cmd));
+}
+
 
