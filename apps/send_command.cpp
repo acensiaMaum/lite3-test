@@ -40,7 +40,7 @@ int main(int argc, char** argv) {
   Command cmd{};
   cmd.head.code = code;
   cmd.head.type = type;
-  cmd.head.params_size = static_cast<uint32_t>(values.size() * sizeof(uint32_t));
+  cmd.head.paramters_size = static_cast<uint32_t>(values.size() * sizeof(uint32_t));
   for (size_t i = 0; i < values.size(); ++i) cmd.data[i] = values[i];
   for (size_t i = values.size(); i < kDataSize; ++i) cmd.data[i] = 0u;
 

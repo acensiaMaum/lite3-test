@@ -19,4 +19,7 @@ target_link_libraries(send_command PRIVATE udp)
 add_executable(recv_command apps/recv_command.cpp)
 target_link_libraries(recv_command PRIVATE udp)
 
+add_executable(main_sender src/main.cpp)
+target_link_libraries(main_sender PRIVATE udp)
+
 

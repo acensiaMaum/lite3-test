@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <cstdint>
+#include "command.hpp"
 
 class UdpSender {
 public:
@@ -16,6 +17,9 @@ public:
 
   // Send raw bytes
   bool send(const std::vector<uint8_t>& payload) const;
+
+  // Send only a CommandHead (header-only)
+  bool send(const CommandHead& head) const;
 
   // Returns whether the destination address and socket are valid
   bool is_valid() const { return valid_ && socketFd_ >= 0 && addr_ != nullptr; }

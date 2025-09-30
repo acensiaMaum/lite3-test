@@ -17,7 +17,7 @@ This produces two executables: `send_command` and `recv_command`.
 ```c++
 struct CommandHead{
 uint32_t code;
-uint32_t params_size; // bytes; must be multiple of 4
+uint32_t paramters_size; // bytes; must be multiple of 4
 uint32_t type;
 };
 static constexpr uint32_t kDataSize = 256;
@@ -27,7 +27,7 @@ uint32_t data[kDataSize];
 };
 ```
 
-On the wire, all fields are big-endian (network byte order). Only `params_size` bytes of data are transmitted.
+On the wire, all fields are big-endian (network byte order). Only `paramters_size` bytes of data are transmitted.
 
 ## Usage
 
