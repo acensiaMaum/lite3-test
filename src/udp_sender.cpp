@@ -66,11 +66,9 @@ bool UdpSender::send(const std::vector<uint8_t>& payload) const {
 
 bool UdpSender::send(const CommandHead& head) const {
   if (!valid_ || socketFd_ < 0 || addr_ == nullptr) return false;
-  std::vector<uint8_t> header_bytes;
-  if (!command_io::serialize(head, header_bytes)) return false;
-  const ssize_t sent = ::sendto(socketFd_, header_bytes.data(), header_bytes.size(), 0,
+  const ssize_t sent = ::sendto(socketFd_, &head, sizeof(head), 0,
                                 reinterpret_cast<sockaddr*>(addr_), sizeof(sockaddr_in));
-  return sent == static_cast<ssize_t>(header_bytes.size());
+  return sent == static_cast<ssize_t>(sizeof(head));
 }
 
 
