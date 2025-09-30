@@ -1,18 +1,11 @@
 #include "command.hpp"
 #include "udp_sender.hpp"
-#include "stable_sender.hpp"
 
 #include <iostream>
-#include <vector>
 #include <string>
-#include <thread>
-#include <atomic>
-#include <chrono>
-#include <csignal>
+#include <vector>
 
 // int main(int argc, char** argv) {
-static std::atomic<bool> g_running{true};
-
 int main() {
 //   if (argc < 3) {
 //     std::cerr << "Usage: " << argv[0] << " <dest_ip> <port>\n";
@@ -37,19 +30,12 @@ int main() {
     return 3;
   }
 
-  std::signal(SIGINT, [](int){ g_running.store(false); });
-
-  std::cout << "Starting 2 Hz sender to " << ip << ":" << port << " (Ctrl+C to stop)\n";
-
-  StableSender stable(sender, cmd, 2.0);
-  stable.start();
-
-  while (g_running.load()) {
-    std::this_thread::sleep_for(std::chrono::milliseconds(50));
+  if (!sender.send(cmd)) {
+    std::cerr << "Send failed\n";
+    return 4;
   }
 
-  stable.stop();
-  std::cout << "Sender stopped.\n";
+  std::cout << "Sent example command to " << ip << ":" << port << " -> " << command_io::to_string(cmd) << "\n";
   return 0;
 }
 
