@@ -12,6 +12,9 @@ cmake --build . -j
 
 This produces two executables: `send_command` and `recv_command`.
 
+---
+
+(Written by cursor.ai, contents underneath are not updated)
 ## Message Format
 
 ```c++
