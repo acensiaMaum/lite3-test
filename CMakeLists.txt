@@ -6,6 +6,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+find_package(Threads REQUIRED)
+
 add_library(udp STATIC
   src/udp_sender.cpp
   src/command_serialization.cpp
@@ -14,6 +16,7 @@ add_library(udp STATIC
 )
 
 target_include_directories(udp PUBLIC include)
+target_link_libraries(udp PUBLIC Threads::Threads)
 
 add_executable(send_command apps/send_command.cpp)
 target_link_libraries(send_command PRIVATE udp)
