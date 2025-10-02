@@ -7,7 +7,13 @@
 #include <vector>
 
 int main(int argc, char** argv) {
-// int main() {
+  std::string help("--help"); //cstring
+  if (argc >= 2){
+    std::string arg1(argv[1]);
+    if (arg1 == help){
+    std::cout<<"Single sender manual"<<std::endl;
+    return 0;}
+  }
   uint32_t code = (argc >= 2) ? hexStringToUint32(argv[1]) : 0x21010202u;
   // uint32_t cmd_type = (argc >= 3) ? std::stoi(argv[2]) : 0;
   uint32_t cmd_value = (argc >= 3) ? static_cast<uint16_t>(std::stoi(argv[2])) : 0;

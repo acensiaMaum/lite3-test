@@ -27,7 +27,7 @@ target_link_libraries(stable_sender PRIVATE udp)
 add_executable(rapid_sender apps/rapid_sender.cpp)
 target_link_libraries(rapid_sender PRIVATE udp)
 
-add_executable(single_sender src/main.cpp)
+add_executable(single_sender apps/single_sender.cpp)
 target_link_libraries(single_sender PRIVATE udp)
 
 
