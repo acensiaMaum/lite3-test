@@ -28,11 +28,11 @@ int main(int argc, char** argv) {
 
   Command cmd{};
   cmd.head.code = code;
-  cmd.head.type = 1;
-  for (size_t i = 0; i < kDataSize; ++i) cmd.data[i] = 0u;
-  cmd.data[0] = cmd_value;
-  cmd.head.paramters_size = sizeof(cmd.data);
-  cout<<"Send value: "<<int(cmd_value)<<endl;
+  cmd.head.type = 0;
+  // for (size_t i = 0; i < kDataSize; ++i) cmd.data[i] = 0u;
+  // cmd.data[0] = cmd_value;
+  cmd.head.paramters_size = cmd_value; //sizeof(cmd.data);
+  std::cout<<"Send value: "<<int(cmd_value)<<std::endl;
   UdpSender sender(ip, port);
   if (!sender.is_valid()) {
     std::cerr << "Invalid destination or socket init failed: " << ip << ":" << port << "\n";
@@ -42,7 +42,7 @@ int main(int argc, char** argv) {
   std::signal(SIGINT, [](int){ g_running.store(false); });
   std::cout << "Starting 2 Hz sender to " << ip << ":" << port << " (Ctrl+C to stop)\n";
 
-  StableSender stable(sender, cmd, 20.0);
+  StableSender stable(sender, cmd, 25.0);
   stable.start();
 
   while (g_running.load()) {
@@ -51,7 +51,7 @@ int main(int argc, char** argv) {
 
   stable.stop();
   std::cout << "Sender stopped.\n";
-  return 0;
+    return 0;
 }
 
 
